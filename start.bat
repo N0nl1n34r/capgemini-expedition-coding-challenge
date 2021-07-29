@@ -1,3 +1,5 @@
+@echo off
+
 rem Path to python3
 set dataaggr_python="\path\to\python3"
 
@@ -10,4 +12,4 @@ set dataaggr_port=8080
 rem Refresh period in milliseconds
 set dataaggr_period=1000
 
-java -jar serv-data-aggr.jar
+java -jar bin\serv-data-aggr.jar

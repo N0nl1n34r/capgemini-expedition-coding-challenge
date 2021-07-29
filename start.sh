@@ -12,4 +12,4 @@ export dataaggr_port=8080
 # Refresh period in milliseconds
 export dataaggr_period=1000
 
-java -jar serv-data-aggr.jar
+java -jar bin/serv-data-aggr.jar
