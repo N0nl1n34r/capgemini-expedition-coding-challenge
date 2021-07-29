@@ -8,7 +8,7 @@ class RestApiAccessor : Thread("RestApiAccessor") {
         isDaemon = true
     }
 
-    @Volatile
+    @Volatile // propagate updates through core-specific caches
     var data: JSONObject? = null
 
     override fun run() {
@@ -26,10 +26,10 @@ class RestApiAccessor : Thread("RestApiAccessor") {
                 if (resp.code == 200) {
                     resp.body!!.string()
                 } else {
-                    System.err.println("got status code ${resp.code}: ${resp.body!!.string()}")
+                    System.err.println("Got status code ${resp.code} from REST API: ${resp.body!!.string()}")
                     null
                 }
-            } ?: continue
+            } ?: continue  // stick with the data we have in case of an error
 
             data = JSONObject(callRes)
         }

@@ -33,11 +33,7 @@ import socket
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(("192.168.0.7", 8080))
-s.send(bytes([0x12]))
-
-# s.send(bytes([0x40]))
-
-# s.close()
+s.send(bytes([0x12]))  # identify ourselves as following the protocol
 
 # setup(1)  # Setting mode
 
@@ -48,6 +44,7 @@ while True:
     #     curCo2 = sensor.CO2
     #     curTvoc = sensor.tVOC
     #     s.send(bytes([0x10] + curCo2.to_bytes(4, 'big')))
+    #     s.send(bytes([0x20] + curTvoc.to_bytes(4, 'big')))
     # elif sensor.check_for_error():
     #     sensor.print_error()
     time.sleep(1)

@@ -7,8 +7,13 @@ class PyComm : Thread() {
         isDaemon = true
     }
 
-    @Volatile
+    @Volatile // propagate updates through core-specific caches
     var co2 = -1
+        private set
+
+    @Volatile
+    var tvoc = -1
+        private set
 
     override fun run() = ServerSocket(8080).use { ss ->
         val s = ss.accept()
@@ -36,8 +41,15 @@ class PyComm : Thread() {
                 0x10 -> {
                     co2 = inp.readInt()
                 }
+                0x20 -> {
+                    tvoc = inp.readInt()
+                }
                 0x40 -> {
-                    println("orderly shutdown")
+                    println("Pi sent shutdown command. Shutting down Pi communication...")
+                    return
+                }
+                else -> {
+                    System.err.println("Pi sent an invalid command and violated protocol. Shutting down Pi communication...")
                     return
                 }
             }
