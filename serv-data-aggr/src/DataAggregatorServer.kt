@@ -30,11 +30,11 @@ private fun loadRules(filename: String?): String {
 }
 
 // Usage: <program> <rulesFile> [pyCommPort=8080] [refreshPeriod=1000]
-fun main(args: Array<String>) {
+fun main() {
     val python = findPython()
-    val rules = loadRules(args.getOrNull(0))
-    val pyCommPort = args.getOrNull(1)?.toInt() ?: 8080
-    val period = args.getOrNull(2)?.toLongOrNull() ?: 1000
+    val rules = loadRules(System.getenv("dataaggr_rules"))
+    val pyCommPort = System.getenv("dataaggr_port")?.toInt() ?: 8080
+    val period = System.getenv("dataaggr_period")?.toLongOrNull() ?: 1000
 
     // Start data fetcher daemons
     val pyComm = PyComm(pyCommPort)
