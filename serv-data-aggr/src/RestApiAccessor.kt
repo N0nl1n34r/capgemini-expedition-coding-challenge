@@ -1,6 +1,7 @@
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import java.io.IOException
 
 class RestApiAccessor : Thread("RestApiAccessor") {
 
@@ -22,7 +23,12 @@ class RestApiAccessor : Thread("RestApiAccessor") {
                 .get()
                 .build()
 
-            val callRes = client.newCall(req).execute().use { resp ->
+            val callRes = try {
+                client.newCall(req).execute()
+            } catch (ex: IOException) {
+                System.err.println("Failed to contact REST API, retrying... Error message was: ${ex.message}")
+                continue
+            }.use { resp ->
                 if (resp.code == 200) {
                     resp.body!!.string()
                 } else {
