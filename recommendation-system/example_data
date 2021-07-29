@@ -1,0 +1,28 @@
+{
+  "samplingStartTime": 1600000000,
+  "samplingStopTime": 1600000060,
+  "samplingInterval": 1440,
+  "building": {
+    "totalPowerConsumption": 0,
+    "powerConsumptionDataCenter": 0,
+    "solarPowerOutput": 0,
+    "outdoorTemperature": 0,
+    "waterConsumption": 0,
+    "totalEmployeesIn": 4
+  },
+  "rooms": [
+    {
+      "id": "K",
+      "powerConsumption": 0,
+      "temperature": 0,
+      "sensors": {
+        "lightOn": true,
+        "windowsOpen": true,
+        "rollerBlindsClosed": true,
+        "airConditioningRunning": true,
+        "heaterRunning": true
+      },
+      "workplaceReservations": 4
+    }
+  ]
+}

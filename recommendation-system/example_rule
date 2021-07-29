@@ -1,0 +1,5 @@
+{
+    "building.totalEmployeesIn = 0 and building.waterConsumption > 0": "Water still running with no employees inside!",
+    "$count(rooms) = 1": "That's not really hot!"
+}
+    
