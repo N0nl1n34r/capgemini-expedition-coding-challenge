@@ -47,11 +47,12 @@ fun main(args: Array<String>) {
 
         data = restApiAcc.data ?: data  // use last version if data fetching failed
         data.put("co2", pyComm.co2)
+        data.put("tvoc", pyComm.tvoc)
 
         // Call the data evaluation routine
         val prcOutput = ProcessBuilder(python, "recommendation_system.py", "$data", rules)
             .start()
-            .errorStream  // python always prints to stderr
+            .inputStream  // python always prints to stderr
 
         val lines = prcOutput.bufferedReader().readLines().filter { it.isNotBlank() }
         val line = lines.singleOrNull()
@@ -66,12 +67,10 @@ fun main(args: Array<String>) {
             val lastSeenWhen = seenEvents[event]
             if (lastSeenWhen == null || System.currentTimeMillis() - lastSeenWhen > SEEN_PURGE_TIME_MS) {
                 seenEvents[event] = System.currentTimeMillis()
-                sendEvent(event)
+                println("evt: $event")
+//                Runtime.getRuntime().exec("$python send_telegram_message.py \"${event.replace("\"", "")}\"")
+                ProcessBuilder(python, "send_telegram_message.py", event).start()
             }
         }
     }
-}
-
-private fun sendEvent(event: String) {
-    println("evt: $event")
 }
