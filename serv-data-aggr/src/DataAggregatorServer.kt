@@ -3,7 +3,9 @@ import org.json.JSONObject
 import java.io.File
 import kotlin.system.exitProcess
 
-const val SEEN_PURGE_TIME_MS = 1000L * 60 * 30
+private const val SEEN_PURGE_TIME_MS = 1000L * 60 * 30
+private val PY_RECC_SYS = "recommendation-system${File.separatorChar}recommendation_system.py"
+private val PY_SEND_TELEGRAM = "telegram-bot${File.separatorChar}send_telegram_message.py"
 
 private fun findPython(): String {
     val python = System.getenv("dataaggr_python")?.takeUnless { it.isBlank() }
@@ -27,14 +29,15 @@ private fun loadRules(filename: String?): String {
     return file.readText()
 }
 
-// Usage: <program> <rulesFile> [refreshPeriod]
+// Usage: <program> <rulesFile> [pyCommPort=8080] [refreshPeriod=1000]
 fun main(args: Array<String>) {
     val python = findPython()
     val rules = loadRules(args.getOrNull(0))
-    val period = args.getOrNull(1)?.toLongOrNull() ?: 1000
+    val pyCommPort = args.getOrNull(1)?.toInt() ?: 8080
+    val period = args.getOrNull(2)?.toLongOrNull() ?: 1000
 
     // Start data fetcher daemons
-    val pyComm = PyComm()
+    val pyComm = PyComm(pyCommPort)
     pyComm.start()
     val restApiAcc = RestApiAccessor()
     restApiAcc.start()
@@ -50,7 +53,8 @@ fun main(args: Array<String>) {
         data.put("tvoc", pyComm.tvoc)
 
         // Call the data evaluation routine
-        val prcOutput = ProcessBuilder(python, "recommendation_system.py", "$data", rules)
+        println(pyComm.co2.toString() + " ${pyComm.tvoc}")
+        val prcOutput = ProcessBuilder(python, PY_RECC_SYS, "$data", rules)
             .start()
             .inputStream  // python always prints to stderr
 
@@ -68,8 +72,7 @@ fun main(args: Array<String>) {
             if (lastSeenWhen == null || System.currentTimeMillis() - lastSeenWhen > SEEN_PURGE_TIME_MS) {
                 seenEvents[event] = System.currentTimeMillis()
                 println("evt: $event")
-//                Runtime.getRuntime().exec("$python send_telegram_message.py \"${event.replace("\"", "")}\"")
-                ProcessBuilder(python, "send_telegram_message.py", event).start()
+                ProcessBuilder(python, PY_SEND_TELEGRAM, event).start()
             }
         }
     }

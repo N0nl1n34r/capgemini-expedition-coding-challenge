@@ -1,7 +1,7 @@
 import java.io.DataInputStream
 import java.net.ServerSocket
 
-class PyComm : Thread() {
+class PyComm(private val port: Int) : Thread() {
 
     init {
         isDaemon = true
@@ -15,7 +15,7 @@ class PyComm : Thread() {
     var tvoc = -1
         private set
 
-    override fun run() = ServerSocket(8080).use { ss ->
+    override fun run() = ServerSocket(port).use { ss ->
         val s = ss.accept()
         if (s == null) {
             System.err.println("Failed to connect to the Pi")
