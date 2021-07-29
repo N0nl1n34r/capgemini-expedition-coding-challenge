@@ -53,7 +53,6 @@ fun main() {
         data.put("tvoc", pyComm.tvoc)
 
         // Call the data evaluation routine
-        println(pyComm.co2.toString() + " ${pyComm.tvoc}")
         val prcOutput = ProcessBuilder(python, PY_RECC_SYS, "$data", rules)
             .start()
             .inputStream  // python always prints to stderr
