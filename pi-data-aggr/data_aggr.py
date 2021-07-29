@@ -31,8 +31,11 @@ def setup(mode=1):
     sys.stdout.write(str(result) + "\n")
 
 
+host = sys.argv[1]
+port = int(sys.argv[2])
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect(("192.168.0.7", 8080))
+s.connect((host, port))
 s.send(bytes([0x12]))  # identify ourselves as following the protocol
 
 setup(1)  # Setting mode
@@ -43,6 +46,7 @@ while True:
         sensor.read_logorithm_results()
         curCo2 = sensor.CO2
         curTvoc = sensor.tVOC
+        # we just use the byte order Java's DataInput expects, i.e. big endian
         s.send(bytes([0x10] + curCo2.to_bytes(4, 'big')))
         s.send(bytes([0x20] + curTvoc.to_bytes(4, 'big')))
     elif sensor.check_for_error():
