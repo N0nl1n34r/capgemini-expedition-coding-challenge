@@ -1,0 +1,25 @@
+{
+    "building.totalEmployeesIn = 0 and $count(rooms.sensors.windowsOpen) > 0": 
+        "\"In folgenden Räumen wurde ein offenes Fenster vergessen: \" & rooms[sensors.windowsOpen].id",
+
+    "building.totalEmployeesIn = 0 and $count(rooms.sensors.lightOn) > 0":
+        "\"In folgenden Räumen wurde das Licht angelassen: \" & rooms[sensors.lightOn].id",
+
+    "building.totalEmployeesIn = 0 and building.waterConsumption > 0":
+        "\"Es sind keine Mitarbeitende mehr anwesend, aber es wird immer noch Wasser verbraucht!\",
+
+    "$count(rooms[workplaceReservations = 0 and sensors.airConditioningRunning]) > 0":
+        "\"In folgenden Räumen wurde eine Klimaanlage vergessen: \" & rooms[workplaceReservations = 0 and sensors.airConditioningRunning].id",
+
+    "$count(rooms[sensors.heaterRunning and sensors.windowsOpen]) > 0":
+        "\"In folgenden Räumen läuft Heizung bei geöffnetem Fenster: \" & rooms[sensors.heaterRunning and sensors.windowsOpen].id",
+
+    "totalPowerConsumption - powerConsumptionDataCenter > 0"
+    
+    "($number($fromMillis(samplingStartTime, '[H]')) < 6 or $number($fromMillis(samplingStartTime, '[H]')) > 19) and 
+      building.powerConsumptionDataCenter > 0": 
+        "\"Das Datencenter läuft noch außerhalb der Geschäftszeiten!\"" 
+
+    "$count(rooms[sensors.eCO2 > 1000 and $not(sensors.windowsOpen)]) > 0":
+        "\"In folgenden Räumen sollte ein Fenster geöffnet werden, weil die eCO2 Konzentration höher als 1000 ppm ist: \" & rooms[sensors.eCO2 > 1000 and $not(sensors.windowsOpen)]"
+}
