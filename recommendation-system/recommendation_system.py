@@ -4,14 +4,19 @@
 # which gets printed, if the jsonata query evaluates to true.
 from pyjsonata import jsonata
 import json
-import sys
 
-json_data = sys.argv[1]
-rules = json.loads(sys.argv[2]) 
 
-intended_actions = []
-for premise, action in rules.items():
-    if jsonata(premise, json_data) == 'true':
-        intended_actions.append(jsonata(action, json_data).strip('"'))
-    
-print(intended_actions)
+def get_recommended_actions(json_data, rules):
+    recommended_actions = []
+    for premise, action in rules.items():
+        if jsonata(premise, json_data) == 'true':
+            recommended_actions.append(jsonata(action, json_data).strip('"'))
+    return recommended_actions
+
+if __name__ == '__main__':
+    import sys
+
+    json_data = sys.argv[1]
+    rules = json.loads(sys.argv[2]) 
+
+    print(get_recommended_actions(json_data, rules))
