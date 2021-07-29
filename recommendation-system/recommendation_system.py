@@ -12,6 +12,6 @@ rules = json.loads(sys.argv[2])
 intended_actions = []
 for premise, action in rules.items():
     if jsonata(premise, json_data) == 'true':
-        intended_actions.append(action)
+        intended_actions.append(jsonata(action, json_data).strip('"'))
     
 print(intended_actions)
