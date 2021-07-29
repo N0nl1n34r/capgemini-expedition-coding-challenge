@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Path to python3
-export dataaggr_python="/path/to/python3"
+export dataaggr_python="/usr/bin/python3"
 
 # Path to the rules file
 export dataaggr_rules="recommendation-system/rules/capgemini_coding_challenge_example_rules"
