@@ -12,7 +12,7 @@
         "\"In folgenden Räumen wurde eine Klimaanlage vergessen: \" & rooms[workplaceReservations = 0 and sensors.airConditioningRunning].id",
 
     "$count(rooms[sensors.heaterRunning and sensors.windowsOpen]) > 0":
-        "\"In folgenden Räumen läuft Heizung bei geöffnetem Fenster: \" & rooms[sensors.heaterRunning and sensors.windowsOpen]",
+        "\"In folgenden Räumen läuft Heizung bei geöffnetem Fenster: \" & rooms[sensors.heaterRunning and sensors.windowsOpen].id",
 
     "($number($fromMillis(samplingStartTime, \"[H]\")) < 6 or $number($fromMillis(samplingStartTime, \"[H]\")) > 19) and (building.powerConsumptionDataCenter > 0)": 
         "\"Das Datencenter läuft noch außerhalb der Geschäftszeiten!\" & rooms[sensors.heaterRunning and sensors.windowsOpen].id",

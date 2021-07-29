@@ -5,12 +5,19 @@
 from pyjsonata import jsonata
 import json
 
+def remove_chars(a_string, a_list_of_chars):
+    for a_char in a_list_of_chars:
+        a_string = a_string.replace(a_char, "")
+    return a_string
 
 def get_recommended_actions(json_data, rules):
     recommended_actions = []
     for premise, action in rules.items():
         if jsonata(premise, json_data) == 'true':
-            recommended_actions.append(jsonata(action, json_data).strip('"'))
+            recommended_action = jsonata(action, json_data)
+            recommended_action = remove_chars(recommended_action, ['"', "[", "]", "{", "}", "\\"])
+
+            recommended_actions.append(recommended_action)
     return recommended_actions
 
 if __name__ == '__main__':
